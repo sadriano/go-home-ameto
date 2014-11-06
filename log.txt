@@ -1,0 +1,1 @@
+11-06 00:36:30.532: E/AndroidRuntime(24357): java.lang.ClassCastException: android.widget.ListView cannot be cast to android.widget.TextView
