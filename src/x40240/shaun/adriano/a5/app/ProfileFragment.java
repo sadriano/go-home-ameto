@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
 	ProgressDialog progress;
 	Dialog tDialog;
 	String tweetText;
-	private ListView listview;
+	ListView listview;
 	ArrayAdapter<String> stringTweetAdapter;
 	List<twitter4j.Status> statuses;
 	List<String> stringStatuses = new ArrayList<String>();
@@ -67,7 +67,8 @@ public class ProfileFragment extends Fragment {
 		listview = (ListView) view.findViewById(R.id.timeline);
 		signout.setOnClickListener(new SignOut());
 		tweet.setOnClickListener(new Tweet());
-		new LoadProfile().execute();
+		prof_name.setText("Welcome " + pref.getString("NAME", ""));
+		//new LoadProfile().execute();
 		new Timeline().execute();
 
 		return view;
@@ -228,7 +229,7 @@ public class ProfileFragment extends Fragment {
 
 		}
 	}
-
+/*
 	private class LoadProfile extends AsyncTask<String, String, Bitmap> {
 		@Override
 		protected void onPreExecute() {
@@ -269,4 +270,5 @@ public class ProfileFragment extends Fragment {
 
 		}
 	}
+	*/
 }
