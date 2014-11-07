@@ -13,5 +13,6 @@
     <string name="intro2_string">or tweet things instead.</string>
     <string name="home_description">This is your timeline. Why not greet your followers?</string>
     <string name="oauth_disclaimer">This app uses Twitter\'s Oauth authentication method.</string>
+    <string name="disclaimer2">If you get signed out trying to tweet, oops, it\'s because you were rate limited. Try again later!</string>
 
 </resources>

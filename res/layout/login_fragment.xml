@@ -42,10 +42,20 @@
         android:id="@+id/oauth_disclaimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/disclaimer2"
         android:layout_alignParentLeft="true"
         android:gravity="center"
         android:text="@string/oauth_disclaimer"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/disclaimer2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:gravity="center"
+        android:text="@string/disclaimer2"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>
