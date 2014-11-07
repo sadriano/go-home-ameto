@@ -6,15 +6,6 @@
     android:layout_gravity="center"
     android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/tweet_text"
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:hint="Post your status here..."
-        
-        tools:ignore="HardcodedText" />
-
     <Button
         android:id="@+id/post_tweet"
         android:layout_width="wrap_content"

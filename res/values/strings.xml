@@ -4,9 +4,9 @@
     <string name="app_name">Go Home Ameto</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="tweet_label">Tweet</string>
+    <string name="tweet_label">Tweet a Thing</string>
     <string name="signout_label">Sign Out</string>
     <string name="profile_dummytext">go home filler</string>
-    <string name="postTweet_label">Post Tweet</string>
+    <string name="postTweet_label">Greet Your Followers</string>
 
 </resources>

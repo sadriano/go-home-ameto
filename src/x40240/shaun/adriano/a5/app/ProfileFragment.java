@@ -44,7 +44,7 @@ public class ProfileFragment extends Fragment {
 	SharedPreferences pref;
 	Bitmap bitmap;
 	Button prof_img, tweet, signout, post_tweet;
-	EditText tweet_text;
+	//EditText tweet_text;
 	ProgressDialog progress;
 	Dialog tDialog;
 	String tweetText;
@@ -53,6 +53,8 @@ public class ProfileFragment extends Fragment {
 	List<twitter4j.Status> statuses;
 	List<String> stringStatuses = new ArrayList<String>();
 	ProgressDialog timelineDialog;
+	GoHome gohome;
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -148,6 +150,7 @@ public class ProfileFragment extends Fragment {
 			stringTweetAdapter = new ArrayAdapter<String>(getActivity(),
 					android.R.layout.simple_list_item_1, stringStatuses);
 			listview.setAdapter(stringTweetAdapter);
+			stringTweetAdapter.notifyDataSetChanged();
 
 		}
 
@@ -161,7 +164,7 @@ public class ProfileFragment extends Fragment {
 			tDialog = new Dialog(getActivity());
 			tDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			tDialog.setContentView(R.layout.tweet_dialog);
-			tweet_text = (EditText) tDialog.findViewById(R.id.tweet_text);
+			//tweet_text = (EditText) tDialog.findViewById(R.id.tweet_text);
 			post_tweet = (Button) tDialog.findViewById(R.id.post_tweet);
 			post_tweet.setOnClickListener(new View.OnClickListener() {
 
@@ -185,7 +188,7 @@ public class ProfileFragment extends Fragment {
 			progress.setMessage("Posting tweet ...");
 			progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			progress.setIndeterminate(true);
-			tweetText = tweet_text.getText().toString();
+			//tweetText = tweet_text.getText().toString();
 			progress.show();
 
 		}
@@ -202,9 +205,11 @@ public class ProfileFragment extends Fragment {
 					""));
 			Twitter twitter = new TwitterFactory(builder.build())
 					.getInstance(accessToken);
-
+			
 			try {
-				twitter4j.Status response = twitter.updateStatus(tweetText);
+				
+				User user = twitter.verifyCredentials();
+				twitter4j.Status response = twitter.updateStatus(GoHome.getStatus(user.getScreenName()));
 				return response.toString();
 			} catch (TwitterException e) {
 				// TODO Auto-generated catch block
@@ -226,6 +231,8 @@ public class ProfileFragment extends Fragment {
 						Toast.LENGTH_SHORT).show();
 				tDialog.dismiss();
 			}
+			
+			new Timeline().execute();
 
 		}
 	}

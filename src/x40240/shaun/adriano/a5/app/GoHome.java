@@ -11,6 +11,7 @@ import static java.util.Arrays.asList;
 public class GoHome {
 
     static List<String> tweets = asList(
+    		"and android.widget.listview cannot be cast to android.widget.textview",
             "member of I Tweet Things By Pressing Links",
             "CEO of Bitmop. We are Japanese company.",
             "but you may know me better as twitter user at-sign cooltouhou",
