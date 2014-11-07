@@ -1,16 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical" >
-   
+
+    <TextView
+        android:id="@+id/intro2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="151dp"
+        android:text="@string/intro2_string"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/intro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/intro2"
+        android:layout_centerHorizontal="true"
+        android:text="@string/intro_string"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <ImageView
         android:id="@+id/login"
-        android:layout_width="400px"
-        android:layout_height="100px"
-        android:layout_gravity="center"
-        android:src="@drawable/login_button" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="142dp"
+        android:contentDescription="TODO"
+        android:src="@drawable/login_button"
+        tools:ignore="HardcodedText,ContentDescription" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/oauth_disclaimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:gravity="center"
+        android:text="@string/oauth_disclaimer"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</RelativeLayout>

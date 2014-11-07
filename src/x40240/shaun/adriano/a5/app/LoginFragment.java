@@ -177,7 +177,7 @@ public class LoginFragment extends Fragment {
 		protected void onPostExecute(Boolean response) {
 			if (response) {
 				progress.hide();
-				Fragment profile = new ProfileFragment();
+				Fragment profile = new HomeFragment();
 				FragmentTransaction ft = getActivity().getFragmentManager()
 						.beginTransaction();
 				ft.replace(R.id.content_frame, profile);

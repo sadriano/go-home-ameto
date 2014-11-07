@@ -1,7 +1,5 @@
 package x40240.shaun.adriano.a5.app;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +15,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Shader.TileMode;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,18 +25,14 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ProfileFragment extends Fragment {
+public class HomeFragment extends Fragment {
 	TextView prof_name;
 	SharedPreferences pref;
-	Bitmap bitmap;
-	Button prof_img, tweet, signout, post_tweet;
-	//EditText tweet_text;
+	Button prof_img, tweet, signout, post_tweet, refresh;
 	ProgressDialog progress;
 	Dialog tDialog;
 	String tweetText;
@@ -59,28 +47,35 @@ public class ProfileFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle args) {
-		View view = inflater.inflate(R.layout.profile_fragment, container,
+		View view = inflater.inflate(R.layout.home_fragment, container,
 				false);
 		prof_name = (TextView) view.findViewById(R.id.prof_name);
 		pref = getActivity().getPreferences(0);
-		// prof_img = (ImageView)view.findViewById(R.id.prof_image);
 		tweet = (Button) view.findViewById(R.id.tweet);
 		signout = (Button) view.findViewById(R.id.signout);
+		refresh = (Button) view.findViewById(R.id.refresh);
 		listview = (ListView) view.findViewById(R.id.timeline);
 		signout.setOnClickListener(new SignOut());
 		tweet.setOnClickListener(new Tweet());
-		prof_name.setText("Welcome " + pref.getString("NAME", ""));
-		//new LoadProfile().execute();
-		new Timeline().execute();
+		refresh.setOnClickListener(new Refresh());
+		prof_name.setText("Welcome, " + pref.getString("NAME", ""));
+		new Timeline(true).execute();
 
 		return view;
+	}
+	
+	private class Refresh implements OnClickListener {
+		
+		@Override
+		public void onClick(View arg0) {
+			new Timeline(false).execute();
+		}
 	}
 
 	private class SignOut implements OnClickListener {
 
 		@Override
 		public void onClick(View arg0) {
-			// TODO Auto-generated method stub
 			SharedPreferences.Editor edit = pref.edit();
 			edit.putString("ACCESS_TOKEN", "");
 			edit.putString("ACCESS_TOKEN_SECRET", "");
@@ -98,6 +93,13 @@ public class ProfileFragment extends Fragment {
 	}
 
 	private class Timeline extends AsyncTask<Void, Void, Void> {
+		
+		private boolean initial;
+
+		public Timeline(boolean initial) {
+			this.initial = initial;
+		}
+		
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -123,7 +125,8 @@ public class ProfileFragment extends Fragment {
 				User user = twitter.verifyCredentials();
 
 				statuses = twitter.getHomeTimeline();
-
+				stringStatuses.clear();
+				
 				System.out.println("Showing @" + user.getScreenName()
 						+ "'s home timeline.");
 				for (twitter4j.Status status : statuses) {
@@ -147,10 +150,11 @@ public class ProfileFragment extends Fragment {
 			timelineDialog.dismiss();
 			Toast.makeText(getActivity().getApplicationContext(),
 					"Timeline updated", Toast.LENGTH_SHORT).show();
+			if (initial == true) {
 			stringTweetAdapter = new ArrayAdapter<String>(getActivity(),
 					android.R.layout.simple_list_item_1, stringStatuses);
 			listview.setAdapter(stringTweetAdapter);
-			stringTweetAdapter.notifyDataSetChanged();
+			} else stringTweetAdapter.notifyDataSetChanged();
 
 		}
 
@@ -160,17 +164,14 @@ public class ProfileFragment extends Fragment {
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			tDialog = new Dialog(getActivity());
 			tDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			tDialog.setContentView(R.layout.tweet_dialog);
-			//tweet_text = (EditText) tDialog.findViewById(R.id.tweet_text);
+			tDialog.setContentView(R.layout.tweet_selection);
 			post_tweet = (Button) tDialog.findViewById(R.id.post_tweet);
 			post_tweet.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					new PostTweet().execute();
 				}
 			});
@@ -188,7 +189,6 @@ public class ProfileFragment extends Fragment {
 			progress.setMessage("Posting tweet ...");
 			progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			progress.setIndeterminate(true);
-			//tweetText = tweet_text.getText().toString();
 			progress.show();
 
 		}
@@ -212,7 +212,6 @@ public class ProfileFragment extends Fragment {
 				twitter4j.Status response = twitter.updateStatus(GoHome.getStatus(user.getScreenName()));
 				return response.toString();
 			} catch (TwitterException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -232,50 +231,9 @@ public class ProfileFragment extends Fragment {
 				tDialog.dismiss();
 			}
 			
-			new Timeline().execute();
+			new Timeline(false).execute();
 
 		}
 	}
-/*
-	private class LoadProfile extends AsyncTask<String, String, Bitmap> {
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			progress = new ProgressDialog(getActivity());
-			progress.setMessage("Loading Profile ...");
-			progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progress.setIndeterminate(true);
-			progress.show();
 
-		}
-
-		protected Bitmap doInBackground(String... args) {
-			try {
-				bitmap = BitmapFactory.decodeStream((InputStream) new URL(pref
-						.getString("IMAGE_URL", "")).getContent());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return bitmap;
-		}
-
-		protected void onPostExecute(Bitmap image) {
-			Bitmap image_circle = Bitmap.createBitmap(bitmap.getWidth(),
-					bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-
-			BitmapShader shader = new BitmapShader(bitmap, TileMode.CLAMP,
-					TileMode.CLAMP);
-			Paint paint = new Paint();
-			paint.setShader(shader);
-			Canvas c = new Canvas(image_circle);
-			c.drawCircle(image.getWidth() / 2, image.getHeight() / 2,
-					image.getWidth() / 2, paint);
-			//prof_img.setImageBitmap(image_circle);
-			prof_name.setText("Welcome " + pref.getString("NAME", ""));
-
-			progress.hide();
-
-		}
-	}
-	*/
 }
